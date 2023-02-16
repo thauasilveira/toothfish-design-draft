@@ -6,6 +6,7 @@ import {
 import { BankIntegrationNotEnoughFundsException } from '../../exceptions/bank-integration.exception';
 import BankIntegration from '../../bank-integration.interface';
 import { Bank } from '../../config/bank-integrations';
+import Http from '../../../test/http';
 
 export class BS2Integration implements BankIntegration {
   serviceBank = Bank.BS2;
@@ -16,6 +17,7 @@ export class BS2Integration implements BankIntegration {
 
   cashOut(payload: CashOutPayload): CashOutResponse {
     if (payload.amount <= this.getBalance()) {
+      Http.post('bs2/cashout', {});
       return {} as CashOutResponse;
     } else {
       throw new BankIntegrationNotEnoughFundsException(
@@ -28,6 +30,7 @@ export class BS2Integration implements BankIntegration {
   cashIn<BS2TransactionWebhook>(
     payload: BS2TransactionWebhook
   ): CashInResponse {
+    Http.post('exchange/cashin/bs2', {});
     return {} as CashInResponse; // map correctly
   }
 }
